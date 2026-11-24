@@ -15,7 +15,7 @@ const SERVICES = [
     name: "Wheel Alignment & Balancing", 
     desc: "Computerized alignment for smoother, safer driving.", 
     price: "₱1,200",
-    img: "https://images.unsplash.com/photo-1626668893632-6f3a4466d22f?q=80&w=600&auto=format&fit=crop" 
+    img: "https://images.unsplash.com/photo-1578844251758-2f71da64c96f?q=80&w=600&auto=format&fit=crop" 
   },
   { 
     icon: "🔋", 
@@ -29,7 +29,7 @@ const SERVICES = [
     name: "Aircon Cleaning & Repair", 
     desc: "Compressor service, Freon recharge, full system diagnostics.", 
     price: "₱2,500+",
-    img: "https://images.unsplash.com/photo-1550520926-1c1b2c3b3a1d?q=80&w=600&auto=format&fit=crop" 
+    img: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=600&auto=format&fit=crop" 
   },
   { 
     icon: "🛢️", 
@@ -153,10 +153,10 @@ function ChatWidget() {
 export function Hero() {
   return (
     <section className="relative bg-neutral-950 text-white overflow-hidden">
-      {/* BACKGROUND IMAGE */}
+      {/* BACKGROUND IMAGE - Bag-ong Link */}
       <div className="absolute inset-0">
         <img 
-          src="https://images.unsplash.com/photo-1613214150384-783dc3e3c4d3?q=80&w=2000&auto=format&fit=crop" 
+          src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=2000&auto=format&fit=crop" 
           alt="Car in garage" 
           className="w-full h-full object-cover opacity-30"
         />
@@ -210,7 +210,7 @@ export function Services() {
             <div key={s.name} className="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-orange-500/50 transition-all hover:-translate-y-1 shadow-lg group flex flex-col">
               
               {/* IMAGE SECTION */}
-              <div className="h-48 overflow-hidden relative">
+              <div className="h-48 overflow-hidden relative bg-neutral-800">
                 <img 
                   src={s.img} 
                   alt={s.name} 
