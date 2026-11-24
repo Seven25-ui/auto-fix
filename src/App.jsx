@@ -14,7 +14,7 @@ const SERVICES = [
 const TESTIMONIALS = [
   { name: "Marco D.", text: "My SUV was back on the road within a day. Great value and an honest estimate.", stars: 5 },
   { name: "Jenny R.", text: "Booked my PMS online — smooth and easy. They even sent photos of the progress!", stars: 5 },
-  { name: "Kuya Ben", text: "Excellent service, and they never push repairs you don't need. Thanks, AutoFix!", stars: 4 },
+  { name: "Kuya Ben", text: "Excellent service, and they never push repairs you don't need. Thanks, The Mechanic!", stars: 4 },
 ];
 
 // ---------- Chat Widget (mock AI, demo) ----------
@@ -27,7 +27,7 @@ const CANNED_REPLIES = [
 function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { from: "ai", text: "Hi! I'm AutoFix AI. What's going on with your car, or what service are you looking for? 🔧" },
+    { from: "ai", text: "Hi! I'm The Mechanic AI. What's going on with your car, or what service are you looking for? 🚗" },
   ]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
@@ -69,7 +69,7 @@ function ChatWidget() {
             <div className="bg-orange-500 px-4 py-3 flex items-center gap-2">
               <span className="text-xl">🤖</span>
               <div>
-                <p className="text-white font-semibold text-sm">AutoFix AI Assistant</p>
+                <p className="text-white font-semibold text-sm">The Mechanic AI</p>
                 <p className="text-orange-100 text-xs">Powered by Cloudflare Workers AI</p>
               </div>
             </div>
@@ -116,41 +116,60 @@ function ChatWidget() {
 // ---------- Sections ----------
 export function Hero() {
   return (
-    <section className="relative bg-gradient-to-br from-neutral-900 via-neutral-900 to-orange-950 text-white">
-      <div className="max-w-6xl mx-auto px-6 py-24 md:py-32">
+    <section className="relative bg-gradient-to-br from-neutral-900 via-neutral-900 to-orange-950 text-white overflow-hidden">
+      <div className="max-w-6xl mx-auto px-6 py-24 md:py-32 relative z-10">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <span className="inline-block bg-orange-500/20 text-orange-400 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-            🏆 Trusted Auto Repair Since 2010
-          </span>
-          <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
-            Your Car, <span className="text-orange-500">In Good Hands</span>
+          {/* Centered Badge */}
+          <div className="flex justify-center mb-6">
+            <span className="inline-block bg-orange-500/20 text-orange-400 text-xs font-semibold px-4 py-2 rounded-full border border-orange-500/30">
+              🏆 Trusted Auto Repair Since 2010
+            </span>
+          </div>
+          
+          {/* Centered Title */}
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight text-center tracking-tight">
+            Your Car, <br className="hidden md:block" />
+            <span className="text-orange-500">In Good Hands</span>
           </h1>
-          <p className="mt-4 text-neutral-300 max-w-xl text-lg">
+          
+          {/* Centered Description */}
+          <p className="mt-6 text-neutral-300 max-w-2xl mx-auto text-center text-lg md:text-xl">
             Expert mechanics, transparent pricing, and a 24/7 AI assistant ready to answer your questions.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#booking" className="bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-lg font-semibold transition-colors">Book Appointment</a>
-            <a href="#services" className="border border-neutral-600 hover:border-orange-500 px-6 py-3 rounded-lg font-semibold transition-colors">View Services</a>
+          
+          {/* Centered Buttons */}
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
+            <a href="#booking" className="bg-orange-500 hover:bg-orange-600 px-8 py-4 rounded-lg font-semibold transition-all shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 hover:-translate-y-0.5">
+              Book Appointment
+            </a>
+            <a href="#services" className="border border-neutral-600 hover:border-orange-500 px-8 py-4 rounded-lg font-semibold transition-all hover:bg-neutral-800">
+              View Services
+            </a>
           </div>
         </motion.div>
       </div>
+      
+      {/* Decorative Background Element */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
     </section>
   );
 }
 
 export function Services() {
   return (
-    <section id="services" className="py-20 bg-neutral-950">
+    <section id="services" className="py-24 bg-neutral-950">
       <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-white mb-2">Our Services</h2>
-        <p className="text-neutral-400 mb-10">Transparent pricing. No hidden fees.</p>
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">Our Services</h2>
+          <p className="text-neutral-400 text-lg">Transparent pricing. No hidden fees.</p>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s) => (
-            <div key={s.name} className="bg-neutral-900 border border-neutral-800 rounded-xl p-6 hover:border-orange-500/50 transition-colors">
-              <div className="text-3xl mb-3">{s.icon}</div>
-              <h3 className="text-white font-semibold text-lg">{s.name}</h3>
-              <p className="text-neutral-400 text-sm mt-2">{s.desc}</p>
-              <p className="text-orange-500 font-semibold mt-3">From {s.price}</p>
+            <div key={s.name} className="bg-neutral-900 border border-neutral-800 rounded-2xl p-8 hover:border-orange-500/50 transition-all hover:-translate-y-1 shadow-lg group">
+              <div className="text-4xl mb-4 bg-neutral-800 w-16 h-16 flex items-center justify-center rounded-xl group-hover:bg-orange-500/20 transition-colors">{s.icon}</div>
+              <h3 className="text-white font-semibold text-xl">{s.name}</h3>
+              <p className="text-neutral-400 text-sm mt-3 leading-relaxed">{s.desc}</p>
+              <p className="text-orange-500 font-bold text-lg mt-6">From {s.price}</p>
             </div>
           ))}
         </div>
@@ -165,24 +184,40 @@ export function Booking() {
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
   return (
-    <section id="booking" className="py-20 bg-neutral-900">
+    <section id="booking" className="py-24 bg-neutral-900">
       <div className="max-w-2xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-white mb-2">Book an Appointment</h2>
-        <p className="text-neutral-400 mb-8">Fill in your details and we'll call you back within 30 minutes.</p>
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-white mb-4">Book an Appointment</h2>
+          <p className="text-neutral-400 text-lg">Fill in your details and we'll call you back within 30 minutes.</p>
+        </div>
         {sent ? (
-          <div className="bg-green-500/10 border border-green-500/40 text-green-400 rounded-xl p-6 text-center">
-            <p className="text-4xl mb-2">✅</p>
-            <p className="font-semibold">Thanks, {form.name}! We received your booking for {form.service}.</p>
-          </div>
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-green-500/10 border border-green-500/40 text-green-400 rounded-2xl p-10 text-center">
+            <p className="text-6xl mb-4">✅</p>
+            <p className="font-semibold text-xl">Thanks, {form.name}!</p>
+            <p className="mt-2">We received your booking for {form.service} on {form.date}.</p>
+            <button onClick={() => setSent(false)} className="mt-6 text-sm underline text-green-300 hover:text-white">Book another appointment</button>
+          </motion.div>
         ) : (
-          <div className="bg-neutral-950 border border-neutral-800 rounded-xl p-6 space-y-4">
-            <input value={form.name} onChange={set("name")} placeholder="Your name" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-orange-500" />
-            <input value={form.plate} onChange={set("plate")} placeholder="Plate number (e.g. ABC 1234)" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-orange-500" />
-            <select value={form.service} onChange={set("service")} className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-orange-500">
-              {SERVICES.map((s) => <option key={s.name}>{s.name}</option>)}
-            </select>
-            <input type="date" value={form.date} onChange={set("date")} className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-lg px-4 py-2.5 outline-none focus:ring-2 focus:ring-orange-500" />
-            <button onClick={() => form.name && form.date && setSent(true)} className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-lg transition-colors">
+          <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-8 space-y-5 shadow-2xl">
+            <div>
+              <label className="text-sm font-medium text-neutral-400 mb-2 block">Full Name</label>
+              <input value={form.name} onChange={set("name")} placeholder="e.g. Juan Dela Cruz" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-neutral-400 mb-2 block">Plate Number</label>
+              <input value={form.plate} onChange={set("plate")} placeholder="e.g. ABC 1234" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-neutral-400 mb-2 block">Service Type</label>
+              <select value={form.service} onChange={set("service")} className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all">
+                {SERVICES.map((s) => <option key={s.name}>{s.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-neutral-400 mb-2 block">Preferred Date</label>
+              <input type="date" value={form.date} onChange={set("date")} className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+            </div>
+            <button onClick={() => form.name && form.date && setSent(true)} className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg py-4 rounded-xl transition-all shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 mt-2">
               Submit Booking
             </button>
           </div>
@@ -194,15 +229,18 @@ export function Booking() {
 
 export function Testimonials() {
   return (
-    <section className="py-20 bg-neutral-950">
+    <section className="py-24 bg-neutral-950">
       <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-3xl font-bold text-white mb-10">What Our Customers Say</h2>
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-white mb-4">What Our Customers Say</h2>
+          <p className="text-neutral-400 text-lg">Don't just take our word for it.</p>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
           {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="bg-neutral-900 border border-neutral-800 rounded-xl p-6">
-              <p className="text-orange-400">{"⭐".repeat(t.stars)}</p>
-              <p className="text-neutral-200 text-sm mt-3">"{t.text}"</p>
-              <p className="text-neutral-500 text-xs mt-4 font-semibold">— {t.name}</p>
+            <div key={t.name} className="bg-neutral-900 border border-neutral-800 rounded-2xl p-8 hover:border-neutral-700 transition-colors">
+              <p className="text-orange-400 text-lg">{"⭐".repeat(t.stars)}</p>
+              <p className="text-neutral-200 mt-4 leading-relaxed">"{t.text}"</p>
+              <p className="text-neutral-500 text-sm mt-6 font-bold">— {t.name}</p>
             </div>
           ))}
         </div>
@@ -213,42 +251,61 @@ export function Testimonials() {
 
 export function Footer() {
   return (
-    <footer className="bg-neutral-900 border-t border-neutral-800">
-      <div className="max-w-6xl mx-auto px-6 py-12 grid gap-8 md:grid-cols-3">
+    <footer className="bg-neutral-900 border-t border-neutral-800 pt-16 pb-8">
+      <div className="max-w-6xl mx-auto px-6 grid gap-12 md:grid-cols-3">
         <div>
-          <h3 className="text-white font-bold text-xl">🔧 AutoFix</h3>
-          <p className="text-neutral-400 text-sm mt-2">Your car, in good hands.</p>
+          <h3 className="text-white font-bold text-2xl flex items-center gap-2">🚗 THE MECHANIC</h3>
+          <p className="text-neutral-400 mt-4">Your car, in good hands. Serving Cebu since 2010.</p>
         </div>
         <div>
-          <h4 className="text-white font-semibold mb-2">Contact</h4>
-          <p className="text-neutral-400 text-sm">📍 123 Colon St., Cebu City</p>
-          <p className="text-neutral-400 text-sm">📞 (032) 123-4567</p>
-          <p className="text-neutral-400 text-sm">✉️ hello@autofix.ph</p>
+          <h4 className="text-white font-semibold text-lg mb-4">Contact Us</h4>
+          <ul className="space-y-3 text-neutral-400">
+            <li className="flex items-center gap-3">📍 123 Colon St., Cebu City</li>
+            <li className="flex items-center gap-3">📞 (032) 123-4567</li>
+            <li className="flex items-center gap-3">✉️ hello@themechanic.ph</li>
+          </ul>
         </div>
         <div>
-          <h4 className="text-white font-semibold mb-2">Hours</h4>
-          <p className="text-neutral-400 text-sm">Mon - Sat: 8:00 AM - 6:00 PM</p>
-          <p className="text-neutral-400 text-sm">Sun: Closed</p>
+          <h4 className="text-white font-semibold text-lg mb-4">Operating Hours</h4>
+          <ul className="space-y-3 text-neutral-400">
+            <li>Monday - Saturday: 8:00 AM - 6:00 PM</li>
+            <li>Sunday: Closed</li>
+          </ul>
         </div>
       </div>
-      <p className="text-center text-neutral-600 text-xs pb-6">© 2026 AutoFix Mechanic Shop. Powered by Cloudflare Workers.</p>
+      <div className="max-w-6xl mx-auto px-6 mt-16 pt-8 border-t border-neutral-800 text-center">
+        <p className="text-neutral-600 text-sm">© 2026 THE MECHANIC. Powered by React & Cloudflare Workers.</p>
+      </div>
     </footer>
   );
 }
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-neutral-950 font-sans">
-      <nav className="sticky top-0 z-40 bg-neutral-900/90 backdrop-blur border-b border-neutral-800">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="text-white font-bold text-lg">🔧 AutoFix</span>
-          <div className="hidden md:flex gap-6 text-sm text-neutral-300">
-            <a href="#services" className="hover:text-orange-500">Services</a>
-            <a href="#booking" className="hover:text-orange-500">Booking</a>
-            <a href="#booking" className="hover:text-orange-500">Contact</a>
+    <div className="min-h-screen bg-neutral-950 font-sans selection:bg-orange-500 selection:text-white">
+      <nav className="sticky top-0 z-40 bg-neutral-900/80 backdrop-blur-md border-b border-neutral-800">
+        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+          {/* LOGO: Left side */}
+          <span className="text-white font-extrabold text-2xl tracking-tight flex items-center gap-2 cursor-pointer">
+            <span className="text-orange-500">🚗</span> THE MECHANIC
+          </span>
+          
+          {/* NAVIGATION LINKS: Center */}
+          <div className="hidden md:flex gap-8 text-sm font-medium text-neutral-300">
+            <a href="#services" className="hover:text-orange-500 transition-colors">Services</a>
+            <a href="#booking" className="hover:text-orange-500 transition-colors">Booking</a>
+            <a href="#booking" className="hover:text-orange-500 transition-colors">Contact</a>
+          </div>
+
+          {/* BOOKING BUTTON: Right side */}
+          <div className="hidden md:block">
+            <a href="#booking" className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all">
+              Book Now
+            </a>
           </div>
         </div>
       </nav>
+      
       <Hero />
       <Services />
       <Booking />
