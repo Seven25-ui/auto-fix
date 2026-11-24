@@ -3,12 +3,48 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // ---------- Mock data ----------
 const SERVICES = [
-  { icon: "🔧", name: "General Tune-Up", desc: "Full inspection, oil change, filter replacement, and fluid top-up.", price: "₱1,500+" },
-  { icon: "🛞", name: "Wheel Alignment & Balancing", desc: "Computerized alignment for smoother, safer driving.", price: "₱1,200" },
-  { icon: "🔋", name: "Battery & Electrical", desc: "Battery testing, replacement, alternator and starter repair.", price: "₱800+" },
-  { icon: "❄️", name: "Aircon Cleaning & Repair", desc: "Compressor service, Freon recharge, full system diagnostics.", price: "₱2,500+" },
-  { icon: "🛢️", name: "Oil Change Express", desc: "Genuine oil and filters, done in 30 minutes.", price: "₱900" },
-  { icon: "🚗", name: "Preventive Maintenance (PMS)", desc: "Scheduled 5k / 10k / 20k / 40k km checkups.", price: "₱2,000+" },
+  { 
+    icon: "🔧", 
+    name: "General Tune-Up", 
+    desc: "Full inspection, oil change, filter replacement, and fluid top-up.", 
+    price: "₱1,500+",
+    img: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=600&auto=format&fit=crop" 
+  },
+  { 
+    icon: "🛞", 
+    name: "Wheel Alignment & Balancing", 
+    desc: "Computerized alignment for smoother, safer driving.", 
+    price: "₱1,200",
+    img: "https://images.unsplash.com/photo-1626668893632-6f3a4466d22f?q=80&w=600&auto=format&fit=crop" 
+  },
+  { 
+    icon: "🔋", 
+    name: "Battery & Electrical", 
+    desc: "Battery testing, replacement, alternator and starter repair.", 
+    price: "₱800+",
+    img: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=600&auto=format&fit=crop" 
+  },
+  { 
+    icon: "❄️", 
+    name: "Aircon Cleaning & Repair", 
+    desc: "Compressor service, Freon recharge, full system diagnostics.", 
+    price: "₱2,500+",
+    img: "https://images.unsplash.com/photo-1550520926-1c1b2c3b3a1d?q=80&w=600&auto=format&fit=crop" 
+  },
+  { 
+    icon: "🛢️", 
+    name: "Oil Change Express", 
+    desc: "Genuine oil and filters, done in 30 minutes.", 
+    price: "₱900",
+    img: "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?q=80&w=600&auto=format&fit=crop" 
+  },
+  { 
+    icon: "🚗", 
+    name: "Preventive Maintenance (PMS)", 
+    desc: "Scheduled 5k / 10k / 20k / 40k km checkups.", 
+    price: "₱2,000+",
+    img: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=600&auto=format&fit=crop" 
+  },
 ];
 
 const TESTIMONIALS = [
@@ -116,41 +152,46 @@ function ChatWidget() {
 // ---------- Sections ----------
 export function Hero() {
   return (
-    <section className="relative bg-gradient-to-br from-neutral-900 via-neutral-900 to-orange-950 text-white overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6 py-24 md:py-32 relative z-10">
+    <section className="relative bg-neutral-950 text-white overflow-hidden">
+      {/* BACKGROUND IMAGE */}
+      <div className="absolute inset-0">
+        <img 
+          src="https://images.unsplash.com/photo-1613214150384-783dc3e3c4d3?q=80&w=2000&auto=format&fit=crop" 
+          alt="Car in garage" 
+          className="w-full h-full object-cover opacity-30"
+        />
+        {/* Dark Overlay aron klaro ang text */}
+        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/80 to-neutral-900/40"></div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 py-32 md:py-48 relative z-10">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          {/* Centered Badge */}
+          
           <div className="flex justify-center mb-6">
-            <span className="inline-block bg-orange-500/20 text-orange-400 text-xs font-semibold px-4 py-2 rounded-full border border-orange-500/30">
+            <span className="inline-block bg-orange-500/20 text-orange-400 text-xs font-semibold px-4 py-2 rounded-full border border-orange-500/30 backdrop-blur-sm">
               🏆 Trusted Auto Repair Since 2010
             </span>
           </div>
           
-          {/* Centered Title */}
-          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight text-center tracking-tight">
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight text-center tracking-tight drop-shadow-lg">
             Your Car, <br className="hidden md:block" />
             <span className="text-orange-500">In Good Hands</span>
           </h1>
           
-          {/* Centered Description */}
-          <p className="mt-6 text-neutral-300 max-w-2xl mx-auto text-center text-lg md:text-xl">
+          <p className="mt-6 text-neutral-300 max-w-2xl mx-auto text-center text-lg md:text-xl drop-shadow-md">
             Expert mechanics, transparent pricing, and a 24/7 AI assistant ready to answer your questions.
           </p>
           
-          {/* Centered Buttons */}
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <a href="#booking" className="bg-orange-500 hover:bg-orange-600 px-8 py-4 rounded-lg font-semibold transition-all shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 hover:-translate-y-0.5">
               Book Appointment
             </a>
-            <a href="#services" className="border border-neutral-600 hover:border-orange-500 px-8 py-4 rounded-lg font-semibold transition-all hover:bg-neutral-800">
+            <a href="#services" className="border border-neutral-500 hover:border-orange-500 px-8 py-4 rounded-lg font-semibold transition-all hover:bg-neutral-800/50 backdrop-blur-sm">
               View Services
             </a>
           </div>
         </motion.div>
       </div>
-      
-      {/* Decorative Background Element */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
     </section>
   );
 }
@@ -163,13 +204,29 @@ export function Services() {
           <h2 className="text-4xl font-bold text-white mb-4">Our Services</h2>
           <p className="text-neutral-400 text-lg">Transparent pricing. No hidden fees.</p>
         </div>
+        
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s) => (
-            <div key={s.name} className="bg-neutral-900 border border-neutral-800 rounded-2xl p-8 hover:border-orange-500/50 transition-all hover:-translate-y-1 shadow-lg group">
-              <div className="text-4xl mb-4 bg-neutral-800 w-16 h-16 flex items-center justify-center rounded-xl group-hover:bg-orange-500/20 transition-colors">{s.icon}</div>
-              <h3 className="text-white font-semibold text-xl">{s.name}</h3>
-              <p className="text-neutral-400 text-sm mt-3 leading-relaxed">{s.desc}</p>
-              <p className="text-orange-500 font-bold text-lg mt-6">From {s.price}</p>
+            <div key={s.name} className="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-orange-500/50 transition-all hover:-translate-y-1 shadow-lg group flex flex-col">
+              
+              {/* IMAGE SECTION */}
+              <div className="h-48 overflow-hidden relative">
+                <img 
+                  src={s.img} 
+                  alt={s.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute top-4 left-4 bg-neutral-900/80 backdrop-blur-md w-10 h-10 flex items-center justify-center rounded-lg text-xl shadow-lg">
+                  {s.icon}
+                </div>
+              </div>
+
+              {/* CONTENT SECTION */}
+              <div className="p-6 flex-1 flex flex-col">
+                <h3 className="text-white font-semibold text-xl">{s.name}</h3>
+                <p className="text-neutral-400 text-sm mt-3 leading-relaxed flex-1">{s.desc}</p>
+                <p className="text-orange-500 font-bold text-lg mt-6">From {s.price}</p>
+              </div>
             </div>
           ))}
         </div>
