@@ -1,8 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CANNED_REPLIES } from "../data/mockData";
+import { CANNED_REPLIES, SERVICES } from "../data/mockData";
+import { supabase } from "../lib/supabase";
 
 const WORKER_URL = import.meta.env.VITE_CHAT_WORKER_URL;
+
+// i-match ang service gikan sa AI ngadto sa ngalan sa imong SERVICES list
+const matchService = (name) => {
+  const n = (name || "").toLowerCase();
+  const found = SERVICES.find((s) => {
+    const sn = s.name.toLowerCase();
+    return sn === n || sn.includes(n) || n.includes(sn);
+  });
+  return found ? found.name : name;
+};
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -12,11 +23,13 @@ export default function ChatWidget() {
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [replyIdx, setReplyIdx] = useState(0);
+  const [pending, setPending] = useState(null);
+  const [saving, setSaving] = useState(false);
   const endRef = useRef(null);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, typing]);
+  }, [messages, typing, pending]);
 
   const getFallbackReply = () => {
     const text = CANNED_REPLIES[replyIdx % CANNED_REPLIES.length];
@@ -31,6 +44,7 @@ export default function ChatWidget() {
     const updatedMessages = [...messages, { from: "user", text }];
     setMessages(updatedMessages);
     setInput("");
+    setPending(null);
     setTyping(true);
 
     try {
@@ -54,10 +68,41 @@ export default function ChatWidget() {
       if (!res.ok) throw new Error("Worker response not ok");
       const data = await res.json();
       setMessages((m) => [...m, { from: "ai", text: data.reply || getFallbackReply() }]);
+      if (data.booking) setPending({ ...data.booking, service: matchService(data.booking.service) });
     } catch {
       setMessages((m) => [...m, { from: "ai", text: getFallbackReply() }]);
     } finally {
       setTyping(false);
+    }
+  };
+
+  const confirmBooking = async () => {
+    if (!pending || saving) return;
+    setSaving(true);
+    try {
+      if (supabase) {
+        const { error } = await supabase.from("bookings").insert([
+          {
+            customer_name: pending.name,
+            plate_number: pending.plate ? pending.plate.toUpperCase() : null,
+            service_name: pending.service,
+            preferred_date: pending.date,
+          },
+        ]);
+        if (error) throw error;
+      }
+      setMessages((m) => [
+        ...m,
+        { from: "ai", text: `✅ Na-book na, ${pending.name}! ${pending.service} sa ${pending.date}. Tawagan ka namo sa sulod sa 30 minutos.` },
+      ]);
+      setPending(null);
+    } catch {
+      setMessages((m) => [
+        ...m,
+        { from: "ai", text: "Dili ma-save ang booking karon. Palihug sulayi usab, o gamita ang booking form sa ubos." },
+      ]);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -103,6 +148,31 @@ export default function ChatWidget() {
                       <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce [animation-delay:150ms]" />
                       <span className="w-1.5 h-1.5 bg-neutral-400 rounded-full animate-bounce [animation-delay:300ms]" />
                     </span>
+                  </div>
+                </div>
+              )}
+              {pending && !typing && (
+                <div className="bg-neutral-900 border border-orange-500/50 rounded-xl p-3 text-sm text-neutral-200 space-y-1">
+                  <p className="font-semibold text-orange-400">📋 Booking Summary</p>
+                  <p>👤 {pending.name}</p>
+                  {pending.plate && <p>🚗 {pending.plate.toUpperCase()}</p>}
+                  <p>🔧 {pending.service}</p>
+                  <p>📅 {pending.date}</p>
+                  <div className="flex gap-2 pt-2">
+                    <button
+                      onClick={confirmBooking}
+                      disabled={saving}
+                      className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-semibold py-1.5 rounded-lg"
+                    >
+                      {saving ? "Saving..." : "Confirm Booking"}
+                    </button>
+                    <button
+                      onClick={() => setPending(null)}
+                      disabled={saving}
+                      className="px-3 bg-neutral-800 hover:bg-neutral-700 text-neutral-300 rounded-lg"
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
               )}
