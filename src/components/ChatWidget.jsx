@@ -1,19 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CANNED_REPLIES, SERVICES } from "../data/mockData";
+import { CANNED_REPLIES } from "../data/mockData";
 import { supabase } from "../lib/supabase";
 
 const WORKER_URL = import.meta.env.VITE_CHAT_WORKER_URL;
-
-// i-match ang service gikan sa AI ngadto sa ngalan sa imong SERVICES list
-const matchService = (name) => {
-  const n = (name || "").toLowerCase();
-  const found = SERVICES.find((s) => {
-    const sn = s.name.toLowerCase();
-    return sn === n || sn.includes(n) || n.includes(sn);
-  });
-  return found ? found.name : name;
-};
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -68,7 +58,8 @@ export default function ChatWidget() {
       if (!res.ok) throw new Error("Worker response not ok");
       const data = await res.json();
       setMessages((m) => [...m, { from: "ai", text: data.reply || getFallbackReply() }]);
-      if (data.booking) setPending({ ...data.booking, service: matchService(data.booking.service) });
+      // ang Worker na ang nag-validate sa service name (gikan sa Supabase), so gamiton ra kini
+      if (data.booking) setPending(data.booking);
     } catch {
       setMessages((m) => [...m, { from: "ai", text: getFallbackReply() }]);
     } finally {
@@ -84,6 +75,7 @@ export default function ChatWidget() {
         const { error } = await supabase.from("bookings").insert([
           {
             customer_name: pending.name,
+            phone: pending.phone || null,
             plate_number: pending.plate ? pending.plate.toUpperCase() : null,
             service_name: pending.service,
             preferred_date: pending.date,
@@ -93,7 +85,10 @@ export default function ChatWidget() {
       }
       setMessages((m) => [
         ...m,
-        { from: "ai", text: `✅ Na-book na, ${pending.name}! ${pending.service} sa ${pending.date}. Tawagan ka namo sa sulod sa 30 minutos.` },
+        {
+          from: "ai",
+          text: `✅ Na-book na, ${pending.name}! ${pending.service} sa ${pending.date}. Tawagan ka namo sa ${pending.phone || "imong number"} sa sulod sa 30 minutos.`,
+        },
       ]);
       setPending(null);
     } catch {
@@ -155,6 +150,7 @@ export default function ChatWidget() {
                 <div className="bg-neutral-900 border border-orange-500/50 rounded-xl p-3 text-sm text-neutral-200 space-y-1">
                   <p className="font-semibold text-orange-400">📋 Booking Summary</p>
                   <p>👤 {pending.name}</p>
+                  {pending.phone && <p>📞 {pending.phone}</p>}
                   {pending.plate && <p>🚗 {pending.plate.toUpperCase()}</p>}
                   <p>🔧 {pending.service}</p>
                   <p>📅 {pending.date}</p>
