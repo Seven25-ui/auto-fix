@@ -5,6 +5,7 @@ import { supabase } from "../lib/supabase";
 
 export default function Booking({ selectedService }) {
   const { services } = useServices();
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Manila" });
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -45,6 +46,10 @@ export default function Booking({ selectedService }) {
       setErrorMsg("Palihug pili og service.");
       return;
     }
+    if (form.date < today) {
+      setErrorMsg("Ang petsa kinahanglan karon o sa umaabot nga adlaw.");
+      return;
+    }
 
     setSubmitting(true);
     setErrorMsg("");
@@ -62,8 +67,14 @@ export default function Booking({ selectedService }) {
         if (error) throw error;
       }
       setSent(true);
-    } catch {
-      setErrorMsg("Dili pa ma-save sa database karon. Palihug i-check ang Supabase config o sulayi og usab.");
+    } catch (err) {
+      if (err?.code === "42501") {
+        setErrorMsg("Palihug pili og petsa nga karon o sa umaabot nga adlaw.");
+      } else if (err?.code === "23514") {
+        setErrorMsg("Taas kaayo ang gisulod nga Name o Plate Number. Palihug paiklia.");
+      } else {
+        setErrorMsg("Dili pa ma-save karon. Palihug sulayi og usab.");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -100,11 +111,11 @@ export default function Booking({ selectedService }) {
             )}
             <div>
               <label className="text-sm font-medium text-neutral-400 mb-2 block">Full Name</label>
-              <input value={form.name} onChange={set("name")} placeholder="e.g. Juan Dela Cruz" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+              <input value={form.name} onChange={set("name")} maxLength={80} placeholder="e.g. Juan Dela Cruz" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
             </div>
             <div>
               <label className="text-sm font-medium text-neutral-400 mb-2 block">Plate Number</label>
-              <input value={form.plate} onChange={set("plate")} placeholder="e.g. ABC 1234" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+              <input value={form.plate} onChange={set("plate")} maxLength={20} placeholder="e.g. ABC 1234" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
             </div>
             <div>
               <label className="text-sm font-medium text-neutral-400 mb-2 block">Service Type</label>
@@ -114,7 +125,7 @@ export default function Booking({ selectedService }) {
             </div>
             <div>
               <label className="text-sm font-medium text-neutral-400 mb-2 block">Preferred Date</label>
-              <input type="date" value={form.date} onChange={set("date")} className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+              <input type="date" min={today} value={form.date} onChange={set("date")} className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
             </div>
             <button
               type="submit"
