@@ -1,7 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
+import useSettings from "../hooks/useSettings";
 
 export default function Hero() {
+  const { since_year } = useSettings();
+
   return (
     <section className="relative bg-neutral-950 text-white overflow-hidden">
       <div className="absolute inset-0">
@@ -17,7 +20,7 @@ export default function Hero() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div className="flex justify-center mb-6">
             <span className="inline-block bg-orange-500/20 text-orange-400 text-xs font-semibold px-4 py-2 rounded-full border border-orange-500/30 backdrop-blur-sm">
-              🏆 Trusted Auto Repair Since 2010
+              🏆 Trusted Auto Repair Since {since_year}
             </span>
           </div>
 
