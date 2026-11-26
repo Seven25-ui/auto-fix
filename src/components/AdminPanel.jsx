@@ -44,6 +44,16 @@ function BookingCard({ b, onStatus, onDelete, onSaveNotes }) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="space-y-1">
           <p className="font-semibold">{b.customer_name}</p>
+          <p className="text-sm text-neutral-400">
+            📞{" "}
+            {b.phone ? (
+              <a href={`tel:${b.phone.replace(/[^0-9+]/g, "")}`} className="text-orange-400 hover:underline">
+                {b.phone}
+              </a>
+            ) : (
+              "-"
+            )}
+          </p>
           <p className="text-sm text-neutral-400">🚗 {b.plate_number || "-"} · 🛠 {b.service_name}</p>
           <p className="text-sm text-neutral-400">📅 {b.preferred_date}</p>
         </div>
@@ -201,6 +211,7 @@ export default function AdminPanel() {
   const today = todayStr();
   const todayCount = rows.filter((r) => dateOnly(r.preferred_date) === today).length;
   const q = search.trim().toLowerCase();
+  const qDigits = q.replace(/[^0-9]/g, "");
 
   const shown = rows
     .filter((r) => filter === "all" || (r.status || "pending") === filter)
@@ -209,7 +220,8 @@ export default function AdminPanel() {
       (r) =>
         !q ||
         (r.plate_number || "").toLowerCase().includes(q) ||
-        (r.customer_name || "").toLowerCase().includes(q)
+        (r.customer_name || "").toLowerCase().includes(q) ||
+        (qDigits && (r.phone || "").replace(/[^0-9]/g, "").includes(qDigits))
     )
     .sort((a, b) => {
       const A = String(a.preferred_date || "");
@@ -253,7 +265,7 @@ export default function AdminPanel() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Pangitaa sa plate o ngalan..."
+            placeholder="Pangitaa sa plate, ngalan o phone..."
             className="flex-1 bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-orange-500"
           />
           <button
