@@ -1,5 +1,14 @@
 import React from "react";
-import { TESTIMONIALS } from "../data/mockData";
+
+// SAMPLE reviews ni. Ilisi sa tinuod nga reviews sa shop sa dili pa mo-live para sa customers.
+const TESTIMONIALS = [
+  { name: "Marco D.", stars: 5, text: "My SUV was back on the road within a day. Great value and an honest estimate." },
+  { name: "Jenny R.", stars: 5, text: "Booked my PMS online — smooth and easy. They even sent photos of the progress!" },
+  { name: "Kuya Ben", stars: 4, text: "Excellent service, and they never push repairs you don't need. Thanks, The Mechanic!" },
+  { name: "Rhea L.", stars: 5, text: "My aircon was blowing warm air. Fixed the same day and the price matched the quote." },
+  { name: "Ate Joy", stars: 5, text: "Maayo kaayo ang serbisyo, dali ra ug dili mahal. Mobalik gyud ko sa sunod nga PMS!" },
+  { name: "Dennis M.", stars: 4, text: "The wheel alignment made my car so much smoother. Clean shop and friendly staff." },
+];
 
 export default function Testimonials() {
   return (
