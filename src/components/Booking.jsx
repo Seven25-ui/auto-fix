@@ -11,6 +11,7 @@ export default function Booking({ selectedService }) {
   const [errorMsg, setErrorMsg] = useState("");
   const [form, setForm] = useState({
     name: "",
+    phone: "",
     plate: "",
     service: selectedService || "",
     date: "",
@@ -42,6 +43,11 @@ export default function Booking({ selectedService }) {
       setErrorMsg("Palihug isulod ang imong Full Name ug Preferred Date.");
       return;
     }
+    const phone = form.phone.trim();
+    if (!/^[0-9+()\s-]{7,20}$/.test(phone)) {
+      setErrorMsg("Palihug isulod ang saktong Phone Number (e.g. 0917 123 4567).");
+      return;
+    }
     if (!form.service) {
       setErrorMsg("Palihug pili og service.");
       return;
@@ -59,6 +65,7 @@ export default function Booking({ selectedService }) {
         const { error } = await supabase.from("bookings").insert([
           {
             customer_name: form.name.trim(),
+            phone,
             plate_number: form.plate.trim().toUpperCase() || null,
             service_name: form.service,
             preferred_date: form.date,
@@ -71,7 +78,7 @@ export default function Booking({ selectedService }) {
       if (err?.code === "42501") {
         setErrorMsg("Palihug pili og petsa nga karon o sa umaabot nga adlaw.");
       } else if (err?.code === "23514") {
-        setErrorMsg("Taas kaayo ang gisulod nga Name o Plate Number. Palihug paiklia.");
+        setErrorMsg("Taas kaayo o mubo kaayo ang gisulod nga Name, Phone o Plate Number. Palihug check-a.");
       } else {
         setErrorMsg("Dili pa ma-save karon. Palihug sulayi og usab.");
       }
@@ -92,10 +99,11 @@ export default function Booking({ selectedService }) {
             <p className="text-6xl mb-4">✅</p>
             <p className="font-semibold text-xl">Thanks, {form.name}!</p>
             <p className="mt-2">We received your booking for <span className="font-semibold text-white">{form.service}</span> on <span className="font-semibold text-white">{form.date}</span>.</p>
+            <p className="mt-2">We'll call you at <span className="font-semibold text-white">{form.phone}</span>.</p>
             <button
               onClick={() => {
                 setSent(false);
-                setForm({ name: "", plate: "", service: selectedService || services[0]?.name || "", date: "" });
+                setForm({ name: "", phone: "", plate: "", service: selectedService || services[0]?.name || "", date: "" });
               }}
               className="mt-6 text-sm underline text-green-300 hover:text-white"
             >
@@ -111,7 +119,11 @@ export default function Booking({ selectedService }) {
             )}
             <div>
               <label className="text-sm font-medium text-neutral-400 mb-2 block">Full Name</label>
-              <input value={form.name} onChange={set("name")} maxLength={80} placeholder="e.g. Juan Dela Cruz" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+              <input value={form.name} onChange={set("name")} maxLength={80} autoComplete="name" placeholder="e.g. Juan Dela Cruz" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-neutral-400 mb-2 block">Phone Number</label>
+              <input type="tel" inputMode="tel" autoComplete="tel" value={form.phone} onChange={set("phone")} maxLength={20} placeholder="e.g. 0917 123 4567" className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
             </div>
             <div>
               <label className="text-sm font-medium text-neutral-400 mb-2 block">Plate Number</label>
