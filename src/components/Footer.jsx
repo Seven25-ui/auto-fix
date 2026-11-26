@@ -98,6 +98,7 @@ export default function Footer() {
     ["Facebook", s.facebook_url],
     ["Instagram", s.instagram_url],
     ["TikTok", s.tiktok_url],
+    ["X", s.x_url],
     ["Messenger", s.messenger_url],
   ].filter(([, url]) => isUrl(url));
 

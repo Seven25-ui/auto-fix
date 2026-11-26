@@ -14,6 +14,7 @@ const SOCIAL_FIELDS = [
   { key: "facebook_url", label: "Facebook page link", placeholder: "https://facebook.com/yourpage" },
   { key: "instagram_url", label: "Instagram link", placeholder: "https://instagram.com/yourshop" },
   { key: "tiktok_url", label: "TikTok link", placeholder: "https://tiktok.com/@yourshop" },
+  { key: "x_url", label: "X (Twitter) link", placeholder: "https://x.com/yourshop" },
   { key: "messenger_url", label: "Messenger link", placeholder: "https://m.me/yourpage" },
 ];
 const SOCIAL_MAX = 200;
