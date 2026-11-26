@@ -1,59 +1,44 @@
 import React from "react";
-import useServices from "../hooks/useServices";
+import { motion } from "framer-motion";
 
-export default function Services({ onSelectService }) {
-  const { services, loading } = useServices();
-
-  const handleBookClick = (serviceName) => {
-    onSelectService(serviceName);
-    document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
-  };
-
+export default function Hero() {
   return (
-    <section id="services" className="py-24 bg-neutral-950">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">Our Services</h2>
-          <p className="text-neutral-400 text-lg">Transparent pricing. No hidden fees.</p>
-        </div>
+    <section className="relative bg-neutral-950 text-white overflow-hidden">
+      <div className="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=2000&auto=format&fit=crop"
+          alt="Car in garage"
+          className="w-full h-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/80 to-neutral-900/40" />
+      </div>
 
-        {loading && <p className="text-center text-neutral-400">Loading services...</p>}
-        {!loading && services.length === 0 && (
-          <p className="text-center text-neutral-400">Wala pay services karon. Balik sa makadiyot.</p>
-        )}
+      <div className="max-w-6xl mx-auto px-6 py-32 md:py-48 relative z-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <div className="flex justify-center mb-6">
+            <span className="inline-block bg-orange-500/20 text-orange-400 text-xs font-semibold px-4 py-2 rounded-full border border-orange-500/30 backdrop-blur-sm">
+              🏆 Trusted Auto Repair Since 2010
+            </span>
+          </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((s) => (
-            <div key={s.id || s.name} className="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-orange-500/50 transition-all hover:-translate-y-1 shadow-lg group flex flex-col">
-              <div className="h-48 overflow-hidden relative bg-neutral-800">
-                {s.img && (
-                  <img
-                    src={s.img}
-                    alt={s.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                )}
-                <div className="absolute top-4 left-4 bg-neutral-900/80 backdrop-blur-md w-10 h-10 flex items-center justify-center rounded-lg text-xl shadow-lg">
-                  {s.icon}
-                </div>
-              </div>
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight text-center tracking-tight drop-shadow-lg">
+            Your Car, <br className="hidden md:block" />
+            <span className="text-orange-500">In Good Hands</span>
+          </h1>
 
-              <div className="p-6 flex-1 flex flex-col">
-                <h3 className="text-white font-semibold text-xl">{s.name}</h3>
-                <p className="text-neutral-400 text-sm mt-3 leading-relaxed flex-1">{s.desc}</p>
-                <div className="mt-6 pt-4 border-t border-neutral-800 flex items-center justify-between">
-                  <p className="text-orange-500 font-bold text-lg">From {s.price}</p>
-                  <button
-                    onClick={() => handleBookClick(s.name)}
-                    className="text-sm font-semibold text-white bg-neutral-800 hover:bg-orange-500 px-4 py-2 rounded-lg transition-colors"
-                  >
-                    Book →
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+          <p className="mt-6 text-neutral-300 max-w-2xl mx-auto text-center text-lg md:text-xl drop-shadow-md">
+            Expert mechanics, transparent pricing, and a 24/7 AI assistant ready to answer your questions.
+          </p>
+
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
+            <a href="#booking" className="bg-orange-500 hover:bg-orange-600 px-8 py-4 rounded-lg font-semibold transition-all shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 hover:-translate-y-0.5">
+              Book Appointment
+            </a>
+            <a href="#services" className="border border-neutral-500 hover:border-orange-500 px-8 py-4 rounded-lg font-semibold transition-all hover:bg-neutral-800/50 backdrop-blur-sm">
+              View Services
+            </a>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
