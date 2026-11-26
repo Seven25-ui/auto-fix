@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "../lib/supabase";
 import ServicesManager from "./ServicesManager";
+import SettingsManager from "./SettingsManager";
 
 const STATUSES = ["pending", "confirmed", "done", "cancelled"];
 const BADGE = {
@@ -230,7 +231,7 @@ export default function AdminPanel() {
         </div>
 
         <div className="flex gap-2 mb-6 border-b border-neutral-800">
-          {[["bookings", "Bookings"], ["services", "Services"]].map(([key, label]) => (
+          {[["bookings", "Bookings"], ["services", "Services"], ["settings", "Settings"]].map(([key, label]) => (
             <button
               key={key}
               onClick={() => setTab(key)}
@@ -243,6 +244,8 @@ export default function AdminPanel() {
 
         {tab === "services" ? (
           <ServicesManager />
+        ) : tab === "settings" ? (
+          <SettingsManager />
         ) : (
           <>
         <div className="flex flex-col sm:flex-row gap-2 mb-4">
