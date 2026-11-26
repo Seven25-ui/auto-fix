@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "../lib/supabase";
+import ServicesManager from "./ServicesManager";
 
 const STATUSES = ["pending", "confirmed", "done", "cancelled"];
 const BADGE = {
@@ -111,6 +112,7 @@ export default function AdminPanel() {
   const [todayOnly, setTodayOnly] = useState(false);
   const [search, setSearch] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
+  const [tab, setTab] = useState("bookings");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -218,13 +220,31 @@ export default function AdminPanel() {
     <div className="min-h-screen bg-neutral-950 text-white px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">🔧 Bookings</h1>
+          <h1 className="text-2xl font-bold">🔧 Admin</h1>
           <div className="flex gap-2">
-            <button onClick={load} className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-lg text-sm">{loading ? "..." : "Refresh"}</button>
+            {tab === "bookings" && (
+              <button onClick={load} className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-lg text-sm">{loading ? "..." : "Refresh"}</button>
+            )}
             <button onClick={logout} className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-lg text-sm">Logout</button>
           </div>
         </div>
 
+        <div className="flex gap-2 mb-6 border-b border-neutral-800">
+          {[["bookings", "Bookings"], ["services", "Services"]].map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => setTab(key)}
+              className={`px-4 py-2 text-sm font-semibold -mb-px border-b-2 ${tab === key ? "border-orange-500 text-white" : "border-transparent text-neutral-400 hover:text-white"}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {tab === "services" ? (
+          <ServicesManager />
+        ) : (
+          <>
         <div className="flex flex-col sm:flex-row gap-2 mb-4">
           <input
             type="text"
@@ -270,6 +290,8 @@ export default function AdminPanel() {
             />
           ))}
         </div>
+          </>
+        )}
       </div>
     </div>
   );

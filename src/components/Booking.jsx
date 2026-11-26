@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { SERVICES } from "../data/mockData";
+import useServices from "../hooks/useServices";
 import { supabase } from "../lib/supabase";
 
 export default function Booking({ selectedService }) {
+  const { services } = useServices();
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [form, setForm] = useState({
     name: "",
     plate: "",
-    service: selectedService || SERVICES[0].name,
+    service: selectedService || "",
     date: "",
   });
+
+  // Kung wala pay napili nga service, ibutang ang una sa listahan kung na-load na
+  useEffect(() => {
+    if (!form.service && services.length > 0) {
+      setForm((prev) => ({ ...prev, service: services[0].name }));
+    }
+  }, [services, form.service]);
 
   useEffect(() => {
     if (selectedService) {
@@ -31,6 +39,10 @@ export default function Booking({ selectedService }) {
     e.preventDefault();
     if (!form.name.trim() || !form.date) {
       setErrorMsg("Palihug isulod ang imong Full Name ug Preferred Date.");
+      return;
+    }
+    if (!form.service) {
+      setErrorMsg("Palihug pili og service.");
       return;
     }
 
@@ -72,7 +84,7 @@ export default function Booking({ selectedService }) {
             <button
               onClick={() => {
                 setSent(false);
-                setForm({ name: "", plate: "", service: selectedService || SERVICES[0].name, date: "" });
+                setForm({ name: "", plate: "", service: selectedService || services[0]?.name || "", date: "" });
               }}
               className="mt-6 text-sm underline text-green-300 hover:text-white"
             >
@@ -97,7 +109,7 @@ export default function Booking({ selectedService }) {
             <div>
               <label className="text-sm font-medium text-neutral-400 mb-2 block">Service Type</label>
               <select value={form.service} onChange={set("service")} className="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all">
-                {SERVICES.map((s) => <option key={s.name} value={s.name}>{s.name}</option>)}
+                {services.map((s) => <option key={s.id || s.name} value={s.name}>{s.name}</option>)}
               </select>
             </div>
             <div>

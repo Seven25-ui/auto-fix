@@ -1,7 +1,9 @@
 import React from "react";
-import { SERVICES } from "../data/mockData";
+import useServices from "../hooks/useServices";
 
 export default function Services({ onSelectService }) {
+  const { services, loading } = useServices();
+
   const handleBookClick = (serviceName) => {
     onSelectService(serviceName);
     document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
@@ -15,15 +17,22 @@ export default function Services({ onSelectService }) {
           <p className="text-neutral-400 text-lg">Transparent pricing. No hidden fees.</p>
         </div>
 
+        {loading && <p className="text-center text-neutral-400">Loading services...</p>}
+        {!loading && services.length === 0 && (
+          <p className="text-center text-neutral-400">Wala pay services karon. Balik sa makadiyot.</p>
+        )}
+
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s) => (
-            <div key={s.name} className="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-orange-500/50 transition-all hover:-translate-y-1 shadow-lg group flex flex-col">
+          {services.map((s) => (
+            <div key={s.id || s.name} className="bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-orange-500/50 transition-all hover:-translate-y-1 shadow-lg group flex flex-col">
               <div className="h-48 overflow-hidden relative bg-neutral-800">
-                <img
-                  src={s.img}
-                  alt={s.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+                {s.img && (
+                  <img
+                    src={s.img}
+                    alt={s.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                )}
                 <div className="absolute top-4 left-4 bg-neutral-900/80 backdrop-blur-md w-10 h-10 flex items-center justify-center rounded-lg text-xl shadow-lg">
                   {s.icon}
                 </div>
