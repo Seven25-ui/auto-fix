@@ -9,6 +9,15 @@ const FIELDS = [
   { key: "closed_text", label: "Closed days", max: 80, placeholder: "e.g. Sunday: Closed" },
 ];
 
+// Optional ang social links. Kung walay sulod, dili mugawas sa website.
+const SOCIAL_FIELDS = [
+  { key: "facebook_url", label: "Facebook page link", placeholder: "https://facebook.com/yourpage" },
+  { key: "instagram_url", label: "Instagram link", placeholder: "https://instagram.com/yourshop" },
+  { key: "tiktok_url", label: "TikTok link", placeholder: "https://tiktok.com/@yourshop" },
+  { key: "messenger_url", label: "Messenger link", placeholder: "https://m.me/yourpage" },
+];
+const SOCIAL_MAX = 200;
+
 const inputClass =
   "w-full bg-neutral-950 border border-neutral-700 text-white rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-orange-500";
 
@@ -69,6 +78,20 @@ export default function SettingsManager() {
       }
       payload[f.key] = v;
     }
+
+    for (const f of SOCIAL_FIELDS) {
+      const v = String(form[f.key] ?? "").trim();
+      if (v && !/^https?:\/\//i.test(v)) {
+        setError(`Ang "${f.label}" kinahanglan magsugod sa https:// (pananglitan ${f.placeholder}).`);
+        return;
+      }
+      if (v.length > SOCIAL_MAX) {
+        setError(`Taas kaayo ang "${f.label}" (max ${SOCIAL_MAX} ka letra).`);
+        return;
+      }
+      payload[f.key] = v || null;
+    }
+
     const year = Number(form.since_year);
     if (!Number.isInteger(year) || year < 1900 || year > 2100) {
       setError("Ang 'Since year' kinahanglan tunga sa 1900 ug 2100.");
@@ -129,6 +152,28 @@ export default function SettingsManager() {
           onChange={set("since_year")}
           className={inputClass}
         />
+      </div>
+
+      <div className="pt-2 border-t border-neutral-800">
+        <p className="text-sm font-semibold text-white mt-4 mb-1">Social media (optional)</p>
+        <p className="text-sm text-neutral-400 mb-4">
+          I-paste ang tibuok link. Kung walay sulod, dili kini ipakita sa website.
+        </p>
+        <div className="space-y-5">
+          {SOCIAL_FIELDS.map((f) => (
+            <div key={f.key}>
+              <label className="text-sm font-medium text-neutral-400 mb-2 block">{f.label}</label>
+              <input
+                type="url"
+                value={form[f.key] ?? ""}
+                onChange={set(f.key)}
+                maxLength={SOCIAL_MAX}
+                placeholder={f.placeholder}
+                className={inputClass}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       {error && <p className="text-red-400 text-sm">{error}</p>}
